@@ -1,0 +1,201 @@
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', 'Arial', sans-serif; /* Updated to Poppins */
+    background: #ffffff; /* Pure white background */
+    color: #333333; /* Dark gray for body text */
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Top Navbar */
+.top-nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95); /* Nearly opaque white */
+    backdrop-filter: blur(10px);
+    padding: 10px 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Subtle black border */
+    transition: background 0.3s ease;
+}
+
+.top-nav:hover {
+    background: #ffffff; /* Solid white */
+}
+
+.nav-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #000000; /* Black text */
+    margin: 0;
+    padding: 5px 10px;
+    animation: gradientText 4s infinite; /* Retained animation */
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.nav-links li {
+    margin: 0 25px;
+}
+
+.nav-links a {
+    color: #999999; /* Light gray */
+    text-decoration: none;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #000000; /* Black on hover */
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+@keyframes gradientText {
+    0% { color: #000000; }
+    50% { color: #333333; }
+    100% { color: #000000; }
+}
+
+/* Profile Section */
+.profile-section {
+    position: relative;
+}
+
+.profile-icon {
+    font-size: 24px;
+    color: #999999; /* Light gray */
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.profile-icon:hover {
+    color: #000000; /* Black */
+    transform: rotate(360deg);
+}
+
+.profile-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 30px;
+    background: #ffffff; /* White */
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    z-index: 1000;
+    color: #333333; /* Dark gray */
+    font-size: 14px;
+    animation: slideIn 0.3s ease;
+}
+
+.profile-section:hover .profile-dropdown {
+    display: block;
+}
+
+.username {
+    font-weight: 700;
+    color: #000000; /* Black */
+    margin-bottom: 10px;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Main Content */
+.main-content {
+    margin-top: 60px;
+    min-height: calc(100vh - 120px);
+    transition: box-shadow 0.3s ease;
+}
+
+.main-content:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Footer */
+.footer {
+    padding: 60px 0;
+    background: #ffffff; /* White */
+    text-align: center;
+    color: #999999; /* Light gray */
+    font-size: 14px;
+    transition: box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.footer:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    background: #f5f5f5; /* Very light gray */
+}
+
+/* Buttons */
+.btn {
+    background: transparent;
+    border: 2px solid #000000; /* Black border */
+    padding: 10px 20px;
+    border-radius: 980px;
+    color: #000000; /* Black text */
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background: #000000; /* Black background */
+    color: #ffffff; /* White text */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.btn.clicked {
+    transform: scale(0.95);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-links {
+        position: static;
+        transform: none;
+        flex-direction: row;
+        margin: 0 auto;
+    }
+    
+    .nav-links li {
+        margin: 0 15px;
+    }
+    
+    .main-content {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .top-nav {
+        padding: 10px;
+    }
+    
+    .nav-links {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .nav-links li {
+        margin: 10px 0;
+    }
+    
+    .nav-title {
+        font-size: 18px;
+    }
+}

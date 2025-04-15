@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5 decrypt-container">
+    <div class="outer-box">
+        <div class="inner-box">
+            <h2 class="text-center decrypt-title">Decrypt File</h2>
+
+            {% if messages %}
+            <div class="alert alert-dismissible fade show" role="alert">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form method="POST" class="decrypt-form">
+                {% csrf_token %}
+
+                <div class="mb-3 algorithm-box">
+                    <label class="form-label">Select Decryption Algorithm:</label>
+                    <select name="algorithm" id="algorithm" class="form-select algorithm-select" required onchange="togglePasswordAndHybridOptions()">
+                        <option value="AES">AES (Advanced Encryption Standard)</option>
+                        <option value="RSA">RSA (Public Key Cryptography)</option>
+                        <option value="Blowfish">Blowfish</option>
+                        <option value="Hybrid">Hybrid Decryption</option>
+                    </select>
+                </div>
+
+                <!-- Hybrid Decryption Options (Initially Hidden) -->
+                <div id="hybridOptions" class="mb-3 hybrid-box" style="display: none;">
+                    <label class="form-label">Select Hybrid Decryption Combination:</label>
+                    <select name="hybrid_choice" id="hybridSelect" class="form-select hybrid-select" onchange="togglePasswordAndHybridOptions()">
+                        <option value="1">AES + RSA</option>
+                        <option value="2">AES + Blowfish</option>
+                        <option value="3">RSA + Blowfish</option>
+                        <option value="4">AES + RSA + Blowfish</option>
+                        <option value="5">Blowfish + AES</option>
+                        <option value="6">Blowfish + RSA</option>
+                    </select>
+                </div>
+
+                <div id="passwordSection" class="mb-3 password-box">
+                    <label class="form-label">Enter Decryption Password (If Required):</label>
+                    <input type="password" name="password" class="form-control password-input" placeholder="Enter password (if applicable)" required>
+                    <p id="passwordMessage" class="mt-2" style="display: none; color: #333333; font-size: 14px;">Password required for this combo</p>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success decrypt-btn">Decrypt File</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Center the content vertically and horizontally */
+    .decrypt-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 120px); /* Adjust for navbar and footer height */
+        padding: 20px;
+    }
+
+    /* Outer box with white background and black border */
+
+
+    /* Inner box with white background and black border */
+    .inner-box {
+        border: 2px solid #000000; /* Darker black border */
+        border-radius: 8px;
+        padding: 30px;
+        background: #ffffff; /* White background */
+        color: #000000; /* Black text for contrast */
+    }
+
+    /* Input fields with darker border */
+    .algorithm-select,
+    .hybrid-select,
+    .password-input {
+        border: 2px solid #000000; /* Darker black border */
+        background: #f5f5f5; /* Light gray background for inputs */
+        color: #333333; /* Dark gray text */
+        border-radius: 6px;
+        padding: 10px;
+        font-family: 'SF Pro Text', sans-serif;
+        transition: all 0.3s ease;
+    }
+
+    .algorithm-select:hover,
+    .hybrid-select:hover,
+    .password-input:hover {
+        border-color: #333333; /* Darker gray on hover */
+        color: #000000; /* Black text on hover */
+    }
+
+    .algorithm-select:focus,
+    .hybrid-select:focus,
+    .password-input:focus {
+        outline: none;
+        border-color: #000000; /* Black on focus */
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Subtle black shadow */
+        color: #000000;
+    }
+
+    /* Ensure existing styles work with new structure */
+    .decrypt-title {
+        font-size: 48px;
+        font-weight: 700;
+        color: #000000; /* Black text */
+        margin-bottom: 40px;
+        text-shadow: none; /* Remove shadow for white background */
+        animation: fadeInUp 1s ease;
+    }
+
+    .decrypt-form {
+        background: transparent; /* Remove background to use inner-box background */
+        padding: 0;
+        border-radius: 0;
+        box-shadow: none;
+        transition: none;
+    }
+
+    .algorithm-box,
+    .hybrid-box,
+    .password-box {
+        background: transparent;
+        padding: 0;
+        border-radius: 0;
+        box-shadow: none;
+        margin-bottom: 20px;
+        transition: none;
+        animation: slideIn 0.5s ease forwards;
+    }
+
+    .form-label {
+        color: #000000; /* Black text */
+        font-size: 18px;
+        font-family: 'SF Pro Text', sans-serif;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .decrypt-btn {
+        background: #28a745; /* Bootstrap success green */
+        border: none;
+        padding: 12px 30px;
+        font-size: 18px;
+        transition: all 0.3s ease;
+    }
+
+    .decrypt-btn:hover {
+        background: #218838; /* Darker green */
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(40, 167, 69, 0.5); /* Green shadow */
+    }
+
+    .decrypt-btn.clicked {
+        transform: scale(0.95);
+    }
+
+    .alert {
+        background: #ffffff; /* White background for alerts */
+        color: #000000; /* Black text */
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+        animation: fadeIn 0.5s ease;
+    }
+
+    .alert-success {
+        border-color: #333333; /* Dark gray for success */
+    }
+
+    .alert-error {
+        border-color: #666666; /* Darker gray for error */
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .decrypt-container {
+            padding: 10px;
+        }
+
+        .decrypt-title {
+            font-size: 36px;
+        }
+
+        .inner-box {
+            padding: 20px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .decrypt-title {
+            font-size: 28px;
+        }
+
+        .inner-box {
+            padding: 15px;
+        }
+    }
+</style>
+
+<script>
+    function togglePasswordAndHybridOptions() {
+        var algorithmSelect = document.getElementById("algorithm"); // Updated to match decrypt.html ID
+        var hybridOptions = document.getElementById("hybridOptions");
+        var passwordSection = document.getElementById("passwordSection");
+        var passwordInput = document.querySelector(".password-input");
+        var passwordMessage = document.getElementById("passwordMessage");
+        var hybridSelect = document.getElementById("hybridSelect");
+
+        // Show/Hide Hybrid Options
+        if (algorithmSelect.value === "Hybrid") {
+            hybridOptions.style.display = "block";
+            // Reset hybrid selection to trigger password check
+            hybridSelect.value = hybridSelect.value; // Keeps current selection or defaults
+        } else {
+            hybridOptions.style.display = "none";
+        }
+
+        // Show/Hide Password Section based on algorithm
+        if (algorithmSelect.value === "RSA") {
+            passwordSection.style.display = "none"; // Always show for decryption due to required attribute
+            passwordInput.value = ""; // Clear password
+            passwordMessage.style.display = "none";
+        } else {
+            passwordSection.style.display = "block"; // Always show for decryption
+            // Check hybrid combination if Hybrid is selected
+            if (algorithmSelect.value === "Hybrid") {
+                var hybridValue = hybridSelect.value;
+                if (hybridValue === "1" || hybridValue === "3" || hybridValue === "4" || hybridValue === "6") {
+                    // Combinations with RSA (1: AES + RSA, 3: RSA + Blowfish, 4: AES + RSA + Blowfish, 6: Blowfish + RSA)
+                    passwordMessage.style.display = "block";
+                } else {
+                    passwordMessage.style.display = "none";
+                }
+            } else {
+                passwordMessage.style.display = "none"; // No message for AES or Blowfish
+            }
+        }
+    }
+
+    // Initial call to set the state based on the default selection
+    togglePasswordAndHybridOptions();
+
+    document.querySelectorAll('.decrypt-btn').forEach(btn => { // Updated to target .decrypt-btn
+        btn.addEventListener('click', function(e) {
+            this.classList.add('clicked');
+            setTimeout(() => this.classList.remove('clicked'), 300);
+        });
+    });
+</script>
+{% endblock %}

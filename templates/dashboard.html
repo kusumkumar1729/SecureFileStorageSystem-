@@ -1,0 +1,244 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure File Encryption Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="top-nav">
+        <div class="container d-flex justify-content-between align-items-center">
+            <h2 class="nav-title">SecureFile</h2>
+            <ul class="nav-links">
+                <li><a href="{% url 'dashboard' user.username %}">My Dashboard</a></li>
+                <li><a href="{% url 'encrypt' %}">Encrypt Files</a></li>
+                <li><a href="{% url 'decrypt' %}">Decrypt Files</a></li>
+                <li><a href="{% url 'history' %}">History</a></li>
+            </ul>
+            <div class="profile-section">
+                <i class="fas fa-user-circle profile-icon"></i>
+                <div class="profile-dropdown">
+                    <p class="username">Username : {{ user.username }}</p>
+                    <p>Email: {{ user.email }}</p>
+                    <p>Last Login: {{ user.last_login|date:"F d, Y H:i A" }}</p>
+                    <a href="{% url 'signout' %}" class="btn hero-btn">Logout</a>
+                </div>
+            </div>
+            
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <main>
+            <!-- Hero Section with Image -->
+            <section class="hero-section">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1 class="hero-title">SecureFile.</h1>
+                        <p class="hero-subtitle">Protect Your Data with Cutting-Edge Encryption</p>
+                        <p>SecureFile offers a robust solution to safeguard your files with advanced encryption technologies, ensuring privacy and security in an increasingly digital world.</p>
+                        <a href="{% url 'encrypt' %}" class="btn hero-btn">Get Started Now</a>
+                    </div>
+                    <div class="hero-image">
+                        <img src="{% static 'images/dashbo.jpg' %}" alt="SecureFile Hero Image">
+                    </div>
+                </div>
+             
+            </section>
+
+            <!-- Marquee Carousel Section -->
+            <section class="marquee-section">
+                <div class="marquee-container">
+                    <div class="marquee-inner" data-anim-time-group="marqueeGallery">
+                        <div class="marquee-item">
+                            <img src="{% static 'images/realtime.jpg' %}" alt="Feature 1">
+                            <div class="marquee-caption">
+                                <h5>Real-Time Encryption</h5>
+                                <a href="#" class="btn marquee-btn">Details</a>
+                            </div>
+                        </div>
+                        <div class="marquee-item">
+                            <img src="{% static 'images/cloud.jpg' %}" alt="Feature 2">
+                            <div class="marquee-caption">
+                                <h5>Cloud Integration</h5>
+                                <a href="#" class="btn marquee-btn">Details</a>
+                            </div>
+                        </div>
+                        <div class="marquee-item">
+                            <img src="{% static 'images/multiplatform.jpg' %}" alt="Feature 3">
+                            <div class="marquee-caption">
+                                <h5>Multi-Platform Support</h5>
+                                <a href="#" class="btn marquee-btn">Details</a>
+                            </div>
+                        </div>
+                        <div class="marquee-item">
+                            <img src="{% static 'images/sharefile.jpg' %}" alt="Feature 4">
+                            <div class="marquee-caption">
+                                <h5>Secure File Sharing</h5>
+                                <a href="#" class="btn marquee-btn">Details</a>
+                            </div>
+                        </div>
+                        <div class="marquee-item">
+                            <img src="{% static 'images/Efficiency.jpg' %}" alt="Feature 5">
+                            <div class="marquee-caption">
+                                <h5>Efficiency and Speed</h5>
+                                <a href="#" class="btn marquee-btn">Details</a>
+                            </div>
+                        </div>
+                        <div class="marquee-item">
+                            <img src="{% static 'images/Strong Encryption.jpg' %}" alt="Feature 6">
+                            <div class="marquee-caption">
+                                <h5>Strong Encryption</h5>
+                                <a href="#" class="btn marquee-btn">Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Encryption Info Section -->
+            <section class="info-section">
+                <div class="container">
+                    <div class="info-box">
+                        <h2>Unbreakable Encryption</h2>
+                        <p>Secure your sensitive data with state-of-the-art encryption technology. Our system employs the most advanced algorithms to ensure your files are protected against unauthorized access, breaches, and cyber threats. Whether you're safeguarding personal documents, business secrets, or critical communications, SecureFile delivers unmatched security with a user-friendly experience.</p>
+                        <p>With SecureFile, you can encrypt files of any size in seconds, share them securely with colleagues, and rest assured knowing your data is protected by industry-leading standards.</p>
+                        <div class="text-center">
+                            <a href="#" class="btn learn-more" id="learn-more-btn">Learn More</a>
+                        </div>
+                    </div>
+                    <div class="info-images">
+                        <img src="{% static 'images/security1.jpg' %}" alt="Security 1" class="info-sub-image">
+                        <img src="{% static 'images/security2.jpg' %}" alt="Security 2" class="info-sub-image">
+                        <img src="{% static 'images/security3.jpg' %}" alt="Security 3" class="info-sub-image">
+                        <img src="{% static 'images/security4.jpg' %}" alt="Security 4" class="info-sub-image">
+                    </div>
+                    <div class="more-info" id="more-info-content">
+                        <h3>Advanced Security Features</h3>
+                        <p>SecureFile goes beyond basic encryption. With features like real-time key generation, multi-layer authentication, and end-to-end encryption, your data remains secure at every step. Our technology adapts to emerging threats, ensuring long-term protection. Explore how we integrate with cloud services, support cross-platform usage, and provide tools for secure file sharing.</p>
+                        <p>We also offer detailed audit logs, customizable encryption settings, and compatibility with popular cloud storage providers like Google Drive and Dropbox.</p>
+                        <ul>
+                            <li><strong>Real-Time Key Generation:</strong> Unique keys for every session.</li>
+                            <li><strong>Multi-Layer Authentication:</strong> Extra security with biometric and password options.</li>
+                            <li><strong>End-to-End Encryption:</strong> Data is encrypted from sender to receiver.</li>
+                            <li><strong>Threat Detection:</strong> Proactive monitoring for potential risks.</li>
+                            <li><strong>Cross-Platform Compatibility:</strong> Works seamlessly on Windows, macOS, iOS, and Android.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Algorithms Section -->
+            <section class="algorithms-section">
+                <div class="container">
+                    <h2>Encryption Technologies</h2>
+                    <p class="text-center mb-5">SecureFile leverages a combination of proven encryption algorithms to provide top-tier security for your files. Learn more about the technologies powering our platform.</p>
+                    <div class="row">
+                        <div class="col-md-3 algorithm-card">
+                            <img src="{% static 'images/aes.png' %}" alt="AES" class="algo-image">
+                            <h3>AES</h3>
+                            <p>Advanced Encryption Standard (AES) is a symmetric-key algorithm trusted by governments and organizations worldwide for its strength and efficiency. SecureFile uses AES-256 for maximum protection.</p>
+                        </div>
+                        <div class="col-md-3 algorithm-card">
+                            <img src="{% static 'images/rsa.png' %}" alt="RSA" class="algo-image">
+                            <h3>RSA</h3>
+                            <p>RSA is an asymmetric encryption method ideal for secure key exchange. It ensures that only authorized parties can decrypt your files, even over unsecured networks.</p>
+                        </div>
+                        <div class="col-md-3 algorithm-card">
+                            <img src="{% static 'images/blowfish.jpeg' %}" alt="Blowfish" class="algo-image">
+                            <h3>Blowfish</h3>
+                            <p>Blowfish is a fast, symmetric-key cipher designed for high-speed encryption. SecureFile employs Blowfish for scenarios requiring rapid processing without compromising security.</p>
+                        </div>
+                        <div class="col-md-3 algorithm-card">
+                            <img src="{% static 'images/hybrid.png' %}" alt="Hybrid" class="algo-image">
+                            <h3>Hybrid</h3>
+                            <p>Our hybrid approach combines symmetric and asymmetric encryption for the best of both worlds: speed and security. This ensures efficient file encryption and secure key distribution.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Developer Section -->
+            <section class="developer-section">
+                <div class="container">
+                    <h2>The SecureFile Team</h2>
+                    <p class="text-center mb-5">Meet the dedicated team behind SecureFile, committed to delivering innovative encryption solutions for a safer digital world.</p>
+                    <div class="row">
+                        <div class="col-md-6 developer-info">
+                            <h3>Our Mission</h3>
+                            <p>Delivering elegant, powerful encryption solutions for a secure digital future. We aim to empower individuals and businesses with tools to protect their data against evolving cyber threats.</p>
+                            <p>Founded in 2020, our team has grown to include experts in cryptography, software engineering, and cybersecurity, all united by a passion for privacy.</p>
+                        </div>
+                        <div class="col-md-6 developer-info">
+                            <h3>Our Vision</h3>
+                            <p>Privacy that’s intuitive and beautifully designed. We envision a world where data security is accessible to everyone, seamlessly integrated into daily workflows without complexity.</p>
+                            <p>We’re constantly innovating to stay ahead of cyber threats, with a focus on user experience and reliability.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Additional Info Section -->
+            <section class="additional-info">
+                <div class="container">
+                    <h2>Why SecureFile?</h2>
+                    <p class="text-center mb-5">Discover the key benefits that make SecureFile the preferred choice for file encryption across industries.</p>
+                    <div class="row">
+                        <div class="col-md-4 info-card">
+                            <i class="fas fa-shield-alt"></i>
+                            <h3>Maximum Security</h3>
+                            <p>Industry-leading encryption ensures your files are safe from unauthorized access, whether stored locally or in the cloud.</p>
+                        </div>
+                        <div class="col-md-4 info-card">
+                            <i class="fas fa-rocket"></i>
+                            <h3>Unmatched Speed</h3>
+                            <p>Encrypt files instantly with optimized algorithms, designed for performance even on large datasets.</p>
+                        </div>
+                        <div class="col-md-4 info-card">
+                            <i class="fas fa-globe"></i>
+                            <h3>Global Trust</h3>
+                            <p>Trusted by millions of users worldwide, from individual professionals to large enterprises, for secure data management.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        <footer class="footer">
+            <div class="container">
+                <p>© 2025 Secure File Encryption System. All rights reserved.</p>
+                <p>Contact us at <a href="mailto:support@securefile.com">support@securefile.com</a> | Follow us on <a href="#">Twitter</a> | <a href="#">LinkedIn</a></p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add click animation to buttons
+        document.querySelectorAll('.marquee-btn, .learn-more, .hero-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                this.classList.add('clicked');
+                setTimeout(() => this.classList.remove('clicked'), 300);
+            });
+        });
+
+        // Toggle more info content
+        document.getElementById('learn-more-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            const moreInfo = document.getElementById('more-info-content');
+            moreInfo.style.display = moreInfo.style.display === 'block' ? 'none' : 'block';
+        });
+    </script>
+</body>
+</html>
