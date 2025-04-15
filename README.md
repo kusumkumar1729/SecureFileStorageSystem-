@@ -62,10 +62,9 @@ A robust and secure web application for file encryption and decryption using AES
 
 ## 📽 Demo
 
-🎥 [Click here to watch the demo video](./secure.mp4)
 
 
-> Replace `YOUR_VIDEO_ID` with your YouTube demo video ID.
+
 
 ---
 
