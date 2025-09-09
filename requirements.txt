@@ -35,3 +35,5 @@ sqlparse==0.5.1
 tzdata==2024.1
 Werkzeug>=3.1
 wsproto==1.2.0
+whitenoise==6.7.0
+
