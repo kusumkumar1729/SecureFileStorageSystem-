@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.db import models
 from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.decorators import login_required
+from django.http import FileResponse, HttpResponse
 from .aes_crypto import aes_encrypt, aes_decrypt
 from .rsa_crypto import generate_rsa_keys, rsa_encrypt_file, rsa_decrypt_file
 from .blowfish_crypto import blowfish_encrypt, blowfish_decrypt
@@ -66,7 +67,8 @@ def encrypt_file(request):
                 action_type='ENCRYPT'
             )
 
-            messages.success(request, f"File encrypted successfully: {file_path}.enc")
+            # Stream the encrypted file back to the user with the original filename
+            return FileResponse(open(file_path, "rb"), as_attachment=True, filename=os.path.basename(file_path))
 
         return render(request, "encrypt.html")
     except Exception as e:
@@ -119,7 +121,8 @@ def decrypt_file(request):
                     encryption_method=algorithm if algorithm != "Hybrid" else f"Hybrid ({hybrid_choice})",
                     action_type='DECRYPT'
                 )
-                messages.success(request, f"File decrypted successfully: {file_path}")
+                # Stream the decrypted file back to the user with the original filename
+                return FileResponse(open(file_path, "rb"), as_attachment=True, filename=os.path.basename(file_path))
             else:
                 failed_attempts[file_path] += 1
                 remaining_attempts = ATTEMPT_LIMIT - failed_attempts[file_path]
