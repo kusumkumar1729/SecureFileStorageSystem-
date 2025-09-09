@@ -33,5 +33,5 @@ setuptools==75.8.0
 simple-websocket==1.1.0
 sqlparse==0.5.1
 tzdata==2024.1
-Werkzeug==3.0.3
+Werkzeug>=3.1
 wsproto==1.2.0
