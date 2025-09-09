@@ -34,16 +34,14 @@ def ensure_rsa_keys():
 def encrypt_file(request):
     try:
         if request.method == "POST":
-            file_selector_path = os.path.join(BASE_DIR, "file_crypto", "file_picker.py")
-            process = subprocess.Popen([sys.executable, file_selector_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            process.wait()
-
-            stdout, stderr = process.communicate()
-            file_path = stdout.strip()
-
-            if not file_path:
-                messages.error(request, "No file selected or file selection canceled.")
+            if "file" not in request.FILES:
+                messages.error(request, "Please select a file to upload.")
                 return redirect("encrypt")
+
+            uploaded_file = request.FILES["file"]
+            storage = FileSystemStorage()
+            saved_name = storage.save(f"uploads/{uploaded_file.name}", uploaded_file)
+            file_path = storage.path(saved_name)
 
             algorithm = request.POST.get("algorithm")
             password = request.POST.get("password", None)
@@ -60,7 +58,6 @@ def encrypt_file(request):
                 ensure_rsa_keys()
                 hybrid_encrypt(file_path, hybrid_choice, password)
 
-            # Save encryption history
             EncryptionHistory.objects.create(
                 user=request.user,
                 filename=os.path.basename(file_path),
@@ -79,16 +76,14 @@ def encrypt_file(request):
 def decrypt_file(request):
     try:
         if request.method == "POST":
-            file_selector_path = os.path.join(BASE_DIR, "file_crypto", "file_picker.py")
-            process = subprocess.Popen([sys.executable, file_selector_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            process.wait()
-
-            stdout, stderr = process.communicate()
-            file_path = stdout.strip()
-
-            if not file_path:
-                messages.error(request, "No file selected or file selection canceled.")
+            if "file" not in request.FILES:
+                messages.error(request, "Please upload the encrypted file.")
                 return redirect("decrypt")
+
+            uploaded_file = request.FILES["file"]
+            storage = FileSystemStorage()
+            saved_name = storage.save(f"uploads/{uploaded_file.name}", uploaded_file)
+            file_path = storage.path(saved_name)
 
             algorithm = request.POST.get("algorithm")
             password = request.POST.get("password", None)
@@ -97,7 +92,7 @@ def decrypt_file(request):
             if algorithm in ["RSA", "Hybrid"]:
                 ensure_rsa_keys()
 
-            if algorithm in ["RSA", "Hybrid"] and "RSA" in hybrid_choice:
+            if algorithm in ["RSA", "Hybrid"] and hybrid_choice and "RSA" in hybrid_choice:
                 if not os.path.exists(PRIVATE_KEY_PATH):
                     messages.error(request, f"Private key not found! Expected at: {PRIVATE_KEY_PATH}")
                     return render(request, "decrypt.html")
@@ -117,7 +112,6 @@ def decrypt_file(request):
 
             if success:
                 failed_attempts[file_path] = 0
-                # Save decryption history
                 EncryptionHistory.objects.create(
                     user=request.user,
                     filename=os.path.basename(file_path),
@@ -135,13 +129,12 @@ def decrypt_file(request):
                 else:
                     messages.error(request, "Too many failed attempts! File will be deleted permanently.")
                     
-                    # Store file in database before deleting
                     with open(file_path, "rb") as f:
                         fs = FileSystemStorage()
                         saved_file = fs.save(f"deleted_files/{os.path.basename(file_path)}", f)
                         DeletedFile.objects.create(filename=os.path.basename(file_path), file=saved_file)
                     
-                    os.remove(file_path)  # Delete file permanently
+                    os.remove(file_path)
                     del failed_attempts[file_path]
                     messages.error(request, "File deleted permanently due to multiple failed attempts.")
 

@@ -16,8 +16,13 @@
             </div>
             {% endif %}
 
-            <form method="POST" class="encrypt-form">
+            <form method="POST" class="encrypt-form" enctype="multipart/form-data">
                 {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">Select File:</label>
+                    <input type="file" name="file" class="form-control" required>
+                </div>
 
                 <div class="mb-3 algorithm-box">
                     <label class="form-label">Select Encryption Algorithm:</label>
